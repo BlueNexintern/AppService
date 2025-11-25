@@ -2,6 +2,8 @@ package com.bluexMainServer.main.Config;
 
 
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -17,4 +19,6 @@ public class RabbitConfig {
         // durable = true → 서버 재시작해도 큐 유지
         return new Queue(QUEUE_NAME, true);
     }
+
+
 }

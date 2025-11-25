@@ -13,9 +13,15 @@ public class AlarmSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendAlarm(String message) {
-        // 기본 익스체인지(빈 문자열) + 큐 이름을 routingKey로 사용
-        rabbitTemplate.convertAndSend(RabbitConfig.QUEUE_NAME, message);
-        System.out.println(" [x] 보낸 메시지: " + message);
+    public void sendAlarm(Long memberId, String message) {
+        // 하나의 문자열로 합치기
+        String payload = memberId + "|" + message;
+
+        rabbitTemplate.convertAndSend(
+                RabbitConfig.QUEUE_NAME,
+                payload
+        );
+
+        System.out.println("[x] 큐로 전달: " + payload);
     }
 }

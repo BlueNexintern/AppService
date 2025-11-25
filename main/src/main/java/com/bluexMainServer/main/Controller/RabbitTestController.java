@@ -18,7 +18,10 @@ public class RabbitTestController {
 
     @GetMapping("/send-test")
     public String sendTest() {
-        alarmSender.sendAlarm("알람 테스트!");
+        Long memberId = 123L; // 임시 (나중에 DB에서 Member 가져감)
+        String message = "서원유통 알림 테스트!";
+
+        alarmSender.sendAlarm(memberId, message);
         return "sent";
     }
 }
