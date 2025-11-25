@@ -19,7 +19,7 @@ public class AlarmListener {
 
     @RabbitListener(queues = RabbitConfig.QUEUE_NAME)
     public void handleMessage(String payload) {
-        System.out.println(" [>] 받은 메시지(raw): " + payload);
+//        System.out.println(" [>] 받은 메시지(raw): " + payload);
 
         // "memberId|message" 형식을 파싱
         String[] parts = payload.split("\\|", 2); // 최대 2개로만 split
@@ -38,8 +38,8 @@ public class AlarmListener {
         }
 
         String message = parts[1];
-        System.out.println("    memberId = " + memberId);
-        System.out.println("    message  = " + message);
+//        System.out.println("    memberId = " + memberId);
+//        System.out.println("    message  = " + message);
 
         // 여기서 Mock 서버로 호출
         MockPushRequest request = new MockPushRequest(memberId, message);
@@ -51,15 +51,15 @@ public class AlarmListener {
             );
 
             if (response != null && response.success()) {
-                System.out.println(" Mock 서버 전송 성공");
+//                System.out.println(" Mock 서버 전송 성공");
                 // TODO: memberId 기준으로 DB 상태 SENT로 업데이트
             } else {
                 String errorCode = (response != null) ? response.errorCode() : "NO_RESPONSE";
-                System.out.println(" Mock 서버 전송 실패, errorCode=" + errorCode);
+//                System.out.println(" Mock 서버 전송 실패, errorCode=" + errorCode);
                 // TODO: DB에 FAILED + errorCode 기록
             }
         } catch (Exception e) {
-            System.out.println(" Mock 서버 호출 예외: " + e.getMessage());
+//            System.out.println(" Mock 서버 호출 예외: " + e.getMessage());
             // TODO: DB에 FAILED + HTTP_ERROR 기록
         }
     }

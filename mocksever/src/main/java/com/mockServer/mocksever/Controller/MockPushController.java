@@ -15,9 +15,9 @@ public class MockPushController {
     @PostMapping("/push")
     public MockPushResponse push(@RequestBody MockPushRequest request) {
 
-        System.out.println("MOCK PUSH SERVER RECEIVED:");
-        System.out.println("MemberId : " + request.memberId());
-        System.out.println("Message  : " + request.message());
+//        System.out.println("MOCK PUSH SERVER RECEIVED:");
+//        System.out.println("MemberId : " + request.memberId());
+//        System.out.println("Message  : " + request.message());
 
         // 실제 NHN Cloud API라면 success/fail 응답을 돌려줄 테지만 여기서는 랜덤으로 성공/실패를 나눠서 보내보자.
         boolean ok = Math.random() > 0.1; // 90% 성공 확률
