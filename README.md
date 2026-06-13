@@ -132,26 +132,25 @@ Kafka를 사용할 경우 Topic·Partition·Consumer Group·Offset 관리를 함
 
 ### 6.1 전체 플로우
 
+![개선 아키텍처](docs/images/architecture.png)
+
 ```
-관리자
-  │
-  │  GET /send-test
-  ▼
-[main 서버 - RabbitTestController]
-  │  DB에서 사용자 1,000명씩 청크 조회
-  │  memberId|message 형식으로 메시지 생성
-  ▼
-[RabbitMQ - alarm.queue (durable)]
-  │  AlarmListener가 메시지 소비
-  │  HTTP POST /mock/nhn/push 호출
-  ▼
-[mocksever - MockPushController]
-  │  90% 확률로 성공, 10% 확률로 MOCK_FAIL 반환
-  ▼
-[main 서버 - AlarmListener]
-  성공 → alarm.consume.success 카운터 증가
-  실패 → alarm.consume.fail 카운터 증가
+① 서원유통 서버 (Producer)
+   관리자 요청 → 1,000명씩 청크 조회
+              → AlarmSend 레코드 생성 (status=READY)
+              → RabbitMQ alarm.queue에 publish (alarmSendId|memberId|message)
+
+② RabbitMQ
+   alarm.queue (durable) — 메시지 보관
+
+③ 서원유통 서버 (Consumer) + FCM
+   consume → FCM(Mock 서버)에 HTTP POST 요청
+          → 응답 성공 : alarm_send.status = SENT
+          → 응답 실패 : alarm_send.status = FAILED + lastErrorCode 기록
+          → 실패 시 RabbitMQ에 재 publish
 ```
+
+> ①과 ③은 현재 코드에서 같은 서버(main 8080)가 담당하며, 향후 Consumer 서버를 분리하는 확장이 가능한 구조입니다.
 
 ### 6.2 main 서버 주요 구성
 
