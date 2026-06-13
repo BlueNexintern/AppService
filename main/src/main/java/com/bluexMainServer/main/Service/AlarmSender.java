@@ -18,9 +18,8 @@ public class AlarmSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendAlarm(Long memberId, String message) {
-        // 하나의 문자열로 합치기
-        String payload = memberId + "|" + message;
+    public void sendAlarm(Long alarmSendId, Long memberId, String message) {
+        String payload = alarmSendId + "|" + memberId + "|" + message;
 
         rabbitTemplate.convertAndSend(
                 RabbitConfig.QUEUE_NAME,

@@ -214,7 +214,7 @@ HTTP 예외 발생 (서버 장애, 타임아웃 등)
 
 이 구조를 통해 `FAILED` 상태인 레코드만 재조회하여 재발송하거나, `lastErrorCode` 기준으로 실패 유형을 분류해 원인을 파악하는 흐름을 만들 수 있습니다.
 
-> 현재 코드에서 DB 상태 업데이트 로직(`SENT`/`FAILED` 기록)은 설계를 완료하고 `TODO`로 표기한 상태이며, 실제 발송 성공·실패 카운팅은 Micrometer 메트릭(`alarm.consume.success`, `alarm.consume.fail`)으로 우선 확인하고 있습니다.
+> `AlarmListener`에서 Mock 서버 응답 결과에 따라 `alarm_send` 테이블의 상태를 실제로 업데이트하며, 발송 성공·실패 건수는 Micrometer 메트릭(`alarm.consume.success`, `alarm.consume.fail`)으로도 함께 확인할 수 있습니다.
 
 
 ## RabbitMQ 장애 대응
